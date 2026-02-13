@@ -1,44 +1,102 @@
 <!doctype html>
 <html lang="en">
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-		<title>reveal.js</title>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-		<link rel="stylesheet" href="dist/reset.css">
-		<link rel="stylesheet" href="dist/reveal.css">
-		<link rel="stylesheet" href="dist/theme/black.css">
+	<title>Band: Swarm of AI Agents</title>
 
-		<!-- Theme used for syntax highlighted code -->
-		<link rel="stylesheet" href="plugin/highlight/monokai.css">
-	</head>
-	<body>
-		<div class="reveal">
-			<div class="slides">
-				<section>Slide 1</section>
-				<section data-visibility="hidden">Slide X</section>
-				<section>Slide 2</section>
-			</div>
+	<link rel="stylesheet" href="dist/reset.css">
+	<link rel="stylesheet" href="dist/reveal.css">
+	<link rel="stylesheet" href="dist/theme/black.css">
+
+	<!-- Theme used for syntax highlighted code -->
+	<link rel="stylesheet" href="plugin/highlight/monokai.css">
+
+	<!-- Add logo at top left corner -->
+	<style>
+		.fhdo-logo {
+			position: fixed;
+			top: 20px;
+			left: 20px;
+			width: 300px;
+			height: auto;
+			z-index: 1000;
+		}
+
+		.presenter-name {
+			position: fixed;
+			bottom: 20px;
+			left: 30px;
+			color: #fff;
+			background: rgba(0, 0, 0, 0.5);
+			padding: 8px 18px;
+			border-radius: 8px;
+			font-size: 1.2em;
+			font-weight: 500;
+			z-index: 1000;
+			pointer-events: none;
+		}
+
+		.reveal .slide-number {
+			left: 50% !important;
+			right: auto !important;
+			transform: translateX(-50%) !important;
+			bottom: 8px;
+		}
+	</style>
+</head>
+
+<body>
+	<!-- <img src="assets/fhdo.jpg" alt="FHDO Logo" class="fhdo-logo" /> -->
+	<div class="presenter-name">Presentator: Sachin Kumar</div>
+
+	<div class="reveal">
+		<div class="slides">
+			<!-- Title Slide -->
+			<section data-background-color="white" data-external="sections/01-title.html"></section>
+
+			<!-- Introduction -->
+			<section data-background-color="white" data-external="sections/02-introduction.html"></section>
+
+			<!-- References -->
+			<section data-background-color="white" data-external="sections/08-references.html"></section>
 		</div>
+	</div>
 
-		<script src="dist/reveal.js"></script>
-		<script src="plugin/notes/notes.js"></script>
-		<script src="plugin/markdown/markdown.js"></script>
-		<script src="plugin/highlight/highlight.js"></script>
-		<script>
-			// More info about initialization & config:
-			// - https://revealjs.com/initialization/
-			// - https://revealjs.com/config/
+	<script src="dist/reveal.js"></script>
+	<script src="plugin/notes/notes.js"></script>
+	<script src="plugin/markdown/markdown.js"></script>
+	<script src="plugin/highlight/highlight.js"></script>
+	<script>
+		// Load external HTML sections
+		async function loadExternalSections() {
+			const sections = document.querySelectorAll('section[data-external]');
+			const promises = Array.from(sections).map(async (section) => {
+				const url = section.getAttribute('data-external');
+				try {
+					const response = await fetch(url);
+					const html = await response.text();
+					section.innerHTML = html;
+					section.removeAttribute('data-external');
+				} catch (error) {
+					console.error(`Failed to load ${url}:`, error);
+					section.innerHTML = '<p>Error loading content</p>';
+				}
+			});
+			await Promise.all(promises);
+		}
+
+		// Initialize Reveal after loading external content
+		loadExternalSections().then(() => {
 			Reveal.initialize({
 				hash: true,
-				showHiddenSlides: true,
-
-				slideNumber: 'c/t',
-
-				// Learn about plugins: https://revealjs.com/plugins/
-				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
+				slideNumber: true,
+				plugins: [RevealMarkdown, RevealHighlight, RevealNotes]
 			});
-		</script>
-	</body>
+		});
+	</script>
+</body>
+
 </html>
